@@ -4,56 +4,66 @@ This file gives coding agents guidance for working in this repository.
 
 ## Purpose
 
-A library of **royalty-free / public-domain** media used for basic tests of [audiobookshelf](https://github.com/advplyr/audiobookshelf). There is no code to build, lint, or test here. The repository's value is its *variety*: each item exists to exercise a specific encoding, container, or library-layout case in the audiobookshelf scanner and player.
+This is a library of **public-domain and freely licensed** media for testing [audiobookshelf](https://github.com/advplyr/audiobookshelf). Its value is *variety*: each **Sample** exists to exercise specific **Cases** in the audiobookshelf scanner and player, such as encodings, containers, tags and folder layouts.
+
+Before naming anything, read [GLOSSARY.md](GLOSSARY.md) and use its terms: Case, Sample, Derived Sample, Verbatim Sample, Source and Required Format. Decisions with lasting consequences are in [docs/adr/](docs/adr/).
 
 ## Layout
 
-`Library/` is meant to be mounted directly as audiobookshelf library folders:
-
-- `Library/Books/` → a "Books" library
-- `Library/Podcasts/` → a "Podcasts" library
+- `Library/Books/` and `Library/Podcasts/` are mounted directly as audiobookshelf libraries. Every folder in them is a Sample.
+- `Sources/` holds the raw material that Derived Samples are generated from. It is never scanned. A Source is never a Sample.
+- `scripts/make-samples.sh` generates every Derived Sample from `Sources/`.
+- `tools/` is gitignored. The script builds the exhale encoder there.
 
 The folder structure *is* test data. audiobookshelf derives metadata from paths, so keep its conventions intact:
 
-- Books: `Books/<Author>/[<Series>/]<Title>/<audio files>`. One folder = one book. Multiple audio files in a folder become one multi-track book, ordered by filename/track number.
-- Optional folder-name tokens audiobookshelf parses: `Book 1 - Title`, `1999 - Title`, `Title - Subtitle`, `Title {Narrator}`. Multi-disc books use `CD1`/`Disc 1` subfolders inside the title folder.
-- Optional sidecar files in a book folder: `cover.jpg`/`cover.png`, `desc.txt`, `reader.txt`, `metadata.opf`, `metadata.json`/`metadata.abs`.
+- Books: `Books/<Author>/[<Series>/]<Title>/<files>`. One folder is one book. Multiple audio files in a folder become one multi-track book, ordered by filename or track number.
+- Folder-name tokens that audiobookshelf parses: `Book 1 - Title`, `1999 - Title`, `Title - Subtitle`, `Title {Narrator}`. Multi-disc books use `CD1`/`Disc 1` subfolders inside the title folder.
+- Optional sidecars in a book folder: `cover.jpg`/`cover.png`, `desc.txt`, `reader.txt`, `metadata.opf`, `metadata.json`/`metadata.abs`.
 - Podcasts: `Podcasts/<Show>/<episode files>`.
 
-The current title folder names describe the case being tested (e.g. `The Body In The Library Single MP3`, `Example Narration Multipart MP3`). Follow that pattern: name the folder after the configuration it covers, not just the title. Because the name is parsed by the scanner, check that a descriptive suffix doesn't change the parsed title in a way that breaks a test.
+**Naming:** name a Sample's folder after the Case it covers, e.g. `Tom Sawyer Single M4B AAC`. The exception is a Sample that tests folder-name tokens: it gets **no** descriptive suffix, because a suffix would change the parsed title (e.g. `1813 - Pride and Prejudice {Karen Savage}`). Its Cases go in `SOURCE.txt` instead.
 
-## Required formats
+## Hard rules
 
-The README's "Required formats" table lists the formats that must always be present, with each one's status. [scripts/make-samples.sh](scripts/make-samples.sh) creates the `Tom Sawyer <format>` books in `Library/Books/Mark Twain/` from the public-domain LibriVox M4B already in the repo, plus Gutenberg EPUB/PDF. Change formats through that script rather than by hand, and update the README table to match.
-
-## Adding test files
-
-- **Licensing first.** Only add media that is public domain or explicitly licensed for redistribution (LibriVox, Internet Archive public-domain collections, CC0/CC-BY recordings, or audio generated for this repo). Record the source URL in a text file next to the media. Existing examples are the `New Text Document.txt` files under `Books/Joshua Kane/` and `Books/Mark Twain/`. Prefer naming new ones `SOURCE.txt`.
-- **Each addition should cover a new case.** Cases worth covering: codecs/containers (MP3 CBR/VBR, M4B/M4A AAC, Opus, OGG Vorbis, FLAC, WMA, WAV), single-file vs. multi-file vs. multi-disc, embedded chapters vs. none, embedded cover vs. `cover.jpg`, ID3v1/ID3v2.3/ID3v2.4/MP4 tags vs. untagged, series/narrator/year folder tokens, ebooks (EPUB/PDF) alongside or instead of audio, Unicode and punctuation in paths (e.g. the curly apostrophe in `Conan O’Brien Needs A Friend`), and podcasts with an RSS-style episode set.
-- **Keep files small.** A short clip proves an encoding case as well as a full book does. Use full-length files only when length itself is what's being tested (long-duration seeking, large-file scanning).
-
-## Git / GitHub
-
-The repo is not yet a git repository or published to GitHub.
-
-- GitHub rejects files over 100 MB, and `AdventuresOfTomSawyer-64kb-Part1.m4b` is about 105 MB. Media should be tracked with Git LFS:
-  ```sh
-  git init
-  git lfs install
-  git lfs track "*.mp3" "*.m4b" "*.m4a" "*.flac" "*.ogg" "*.opus" "*.wav" "*.wma" "*.epub" "*.pdf"
-  git add .gitattributes
+- **No file over 40 MB**, with no exceptions. CI enforces this. There is no Git LFS. See [ADR 0001](docs/adr/0001-trimmed-sources-committed-without-lfs.md). Git history is permanent, so every byte you commit is downloaded by every clone forever. Keep additions small.
+- **Licensing first.** Allowed: public domain, CC0, CC-BY, CC-BY-SA, and their NC variants. ND licences are allowed only for Verbatim Samples. Verify the licence against a primary source (the feed, the embedded tags, or the archive.org item), not from memory.
+- **Every Source and Sample has a `SOURCE.txt`** in this format:
   ```
-- Paths contain spaces and non-ASCII characters. On Windows, set `git config core.quotepath false` so `git status` shows the real names, and don't "fix" the names. They are intentional test cases.
+  Title:
+  Author/Creator:
+  Licence:
+  Licence URL:
+  Source URL:
+  Derived from:      (Derived Samples only: path of the Source)
+  Cases:
+  ```
+- **Each addition covers a new Case.** Check the README's Wanted list.
+- **Don't "fix" paths.** Spaces, non-ASCII characters (`’`, `à`) and punctuation (`!`, `{}`) are deliberate test cases. On Windows, set `git config core.quotepath false`.
 
-## Inspecting media
+## Derived vs. Verbatim Samples
 
-`ffprobe` (from ffmpeg) is the standard way to check what a file actually contains (codec, bitrate, chapters, tags):
+- **Derived Samples** are generated by `scripts/make-samples.sh`, and only from `Sources/`. To change one, edit the script, rerun it, and commit the output. Never edit a Derived Sample by hand. The script's output is byte-for-byte reproducible, so a rerun on a clean checkout should leave `git status` clean. If it doesn't, something has changed.
+- **Verbatim Samples** (most of `Library/Podcasts/`) are committed exactly as published: no re-encoding, retagging or trimming. Their `SOURCE.txt` is written by hand.
+- **A new Source** is a trimmed, unmodified excerpt, e.g. the first five LibriVox chapter MP3s. It is never a whole book.
+
+## Required Formats
+
+The README's "Required formats" table lists the formats that must always have a Sample. They're all `Tom Sawyer <format>` books in `Library/Books/Mark Twain/`, generated from the Tom Sawyer Source. Change them only through the script, and keep the README table in step.
+
+## Tooling
+
+Linux and macOS, portable bash. You need `ffmpeg`/`ffprobe`, plus `git`, `make` and a C++ compiler for exhale (ffmpeg can't encode xHE-AAC). To check what a file actually contains:
 
 ```sh
 ffprobe -hide_banner -show_format -show_streams -show_chapters "path/to/file.m4b"
 ```
 
-ffmpeg is not installed on the current dev machine. Install it (e.g. `winget install Gyan.FFmpeg`) before generating or verifying encodings.
+Before committing, check the size cap:
+
+```sh
+find . -path ./.git -prune -o -type f -size +40M -print
+```
 
 ## Agent skills
 
