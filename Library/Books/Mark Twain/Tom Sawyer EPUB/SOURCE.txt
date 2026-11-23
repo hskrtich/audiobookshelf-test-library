@@ -1,0 +1,7 @@
+Title: The Adventures of Tom Sawyer
+Author/Creator: Mark Twain; Project Gutenberg
+Licence: Public domain in the USA
+Licence URL: https://www.gutenberg.org/policy/license.html
+Source URL: https://www.gutenberg.org/ebooks/74
+Derived from: Sources/Mark Twain - The Adventures of Tom Sawyer (ebooks)
+Cases: EPUB-only book (no audio); Project Gutenberg EPUB3 with images, copied unmodified.

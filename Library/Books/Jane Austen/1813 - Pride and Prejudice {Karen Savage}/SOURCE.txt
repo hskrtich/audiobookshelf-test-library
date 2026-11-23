@@ -1,0 +1,7 @@
+Title: Pride and Prejudice
+Author/Creator: Jane Austen; read by Karen Savage for LibriVox; cover illustrations by Hugh Thomson (1894)
+Licence: Public Domain (audio); public domain, PD-old (illustrations)
+Licence URL: http://creativecommons.org/licenses/publicdomain/
+Source URL: https://archive.org/details/pride_prejudice_krs_librivox ; embedded cover https://commons.wikimedia.org/wiki/File:Thomson-PP01.jpg ; cover.jpg https://commons.wikimedia.org/wiki/File:Houghton_Typ_805.94.8320_-_Pride_and_Prejudice,_1894,_Hugh_Thomson_-_superior_dancing.jpg
+Derived from: Sources/Jane Austen - Pride and Prejudice and Sources/Hugh Thomson - Pride and Prejudice illustrations
+Cases: Year token (1813 -) and narrator token ({Karen Savage}) in the folder name; single M4A (not M4B), AAC-LC 64 kbit/s mono, no chapters; embedded cover vs. cover.jpg (different images: embedded is 'Reading Jane's letters', cover.jpg is 'Such very superior dancing'); desc.txt vs. embedded description, and reader.txt (Karen Savage (reader.txt)) vs. embedded composer (Karen Savage (embedded tag)), deliberately different to test which source wins. Four 40 s clips from 20 s into chapters 1-4, mono 44100 Hz, concatenated.
