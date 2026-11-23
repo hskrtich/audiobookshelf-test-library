@@ -1,0 +1,8 @@
+Title: The Adventures of Tom Sawyer (EPUB and PDF editions)
+Author/Creator: Mark Twain
+Licence: Public domain in the USA
+Licence URL: https://www.gutenberg.org/policy/license.html
+Source URL:
+  EPUB: https://www.gutenberg.org/ebooks/74 (EPUB3 with images, fetched from the official mirror https://gutenberg.pglaf.org/cache/epub/74/pg74-images-3.epub)
+  PDF: https://archive.org/details/adventuresoftoms00twaiiala (1876 American Publishing Co. first edition, UCLA scan with OCR text layer, marked NOT_IN_COPYRIGHT)
+Cases: Source for the "Tom Sawyer EPUB" and "Tom Sawyer PDF" Required Formats. Files unmodified.
