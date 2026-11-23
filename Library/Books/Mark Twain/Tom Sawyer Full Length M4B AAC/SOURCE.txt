@@ -1,0 +1,7 @@
+Title: The Adventures of Tom Sawyer
+Author/Creator: Mark Twain; read by LibriVox volunteers
+Licence: Public Domain Mark 1.0
+Licence URL: https://creativecommons.org/publicdomain/mark/1.0/
+Source URL: https://archive.org/details/adventures_tom_sawyer_3_1903_librivox
+Derived from: Sources/Mark Twain - The Adventures of Tom Sawyer
+Cases: Full-length single M4B for long-duration seeking and large-file scanning: all of Source chapters 1-5 in full (about 76 min); AAC-LC 64 kbit/s mono; 5 embedded chapters named Chapter 1-5.

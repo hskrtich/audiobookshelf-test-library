@@ -1,0 +1,7 @@
+Title: Watson’s Casebook (podcast made from A Study in Scarlet)
+Author/Creator: Arthur Conan Doyle; read by Ashleighjane for LibriVox
+Licence: Public Domain Mark 1.0
+Licence URL: https://creativecommons.org/publicdomain/mark/1.0/
+Source URL: https://archive.org/details/study_scarlet_1203_librivox
+Derived from: Sources/Arthur Conan Doyle - A Study in Scarlet
+Cases: Podcast folder name with a curly apostrophe (U+2019); 3 M4A episodes, AAC-LC 64 kbit/s mono; podcast-style MP4 tags: genre Podcast, stik 21 (podcast), show, track 1-3, episode_sort 1-3, episode_id S01E01-S01E03, season 1, release dates 2024-01-01 / 2024-01-08 / 2024-01-15; no chapters; no RSS feed. Three 40 s clips from 20 s into chapters 1-3.

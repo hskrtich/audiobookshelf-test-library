@@ -1,0 +1,7 @@
+Title: A Study in Scarlet
+Author/Creator: Arthur Conan Doyle; read by Ashleighjane for LibriVox
+Licence: Public Domain Mark 1.0
+Licence URL: https://creativecommons.org/publicdomain/mark/1.0/
+Source URL: https://archive.org/details/study_scarlet_1203_librivox
+Derived from: Sources/Arthur Conan Doyle - A Study in Scarlet
+Cases: Series folder (Sherlock Holmes) and 'Book N -' sequence token in the folder name; multi-file MP3 book of 5 files; LAME VBR (-q:a 6, Xing header); ID3v2.4 tags with track numbers 1/5-5/5 and chapter titles; no chapters. Five 40 s clips from 20 s into chapters 1-5, mono 44100 Hz.
