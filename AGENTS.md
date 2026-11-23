@@ -10,14 +10,14 @@ Before naming anything, read [GLOSSARY.md](GLOSSARY.md) and use its terms: Case,
 
 ## Layout
 
-- `Library/Books/` and `Library/Podcasts/` are mounted directly as audiobookshelf libraries. Every folder in them is a Sample.
+- `Library/Audiobooks/` and `Library/Podcasts/` are mounted directly as audiobookshelf libraries. Every folder in them is a Sample.
 - `Sources/` holds the raw material that Derived Samples are generated from. It is never scanned. A Source is never a Sample.
 - `scripts/make-samples.sh` generates every Derived Sample from `Sources/`.
 - `tools/` is gitignored. The script builds the exhale encoder there.
 
 The folder structure *is* test data. audiobookshelf derives metadata from paths, so keep its conventions intact:
 
-- Books: `Books/<Author>/[<Series>/]<Title>/<files>`. One folder is one book. Multiple audio files in a folder become one multi-track book, ordered by filename or track number.
+- Audiobooks: `Audiobooks/<Author>/[<Series>/]<Title>/<files>`. One folder is one book. Multiple audio files in a folder become one multi-track book, ordered by filename or track number.
 - Folder-name tokens that audiobookshelf parses: `Book 1 - Title`, `1999 - Title`, `Title - Subtitle`, `Title {Narrator}`. Multi-disc books use `CD1`/`Disc 1` subfolders inside the title folder.
 - Optional sidecars in a book folder: `cover.jpg`/`cover.png`, `desc.txt`, `reader.txt`, `metadata.opf`, `metadata.json`/`metadata.abs`.
 - Podcasts: `Podcasts/<Show>/<episode files>`.
@@ -49,7 +49,7 @@ The folder structure *is* test data. audiobookshelf derives metadata from paths,
 
 ## Required Formats
 
-The README's "Required formats" table lists the formats that must always have a Sample. They're all `Tom Sawyer <format>` books in `Library/Books/Mark Twain/`, generated from the Tom Sawyer Source. Change them only through the script, and keep the README table in step.
+The README's "Required formats" table lists the formats that must always have a Sample. They're all `Tom Sawyer <format>` books in `Library/Audiobooks/Mark Twain/`, generated from the Tom Sawyer Source. Change them only through the script, and keep the README table in step.
 
 ## Tooling
 

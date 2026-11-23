@@ -18,7 +18,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-BOOKS="$ROOT/Library/Books"
+BOOKS="$ROOT/Library/Audiobooks"
 PODCASTS="$ROOT/Library/Podcasts"
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/make-samples.XXXXXX")"
 trap 'rm -rf "$WORK"' EXIT
@@ -138,7 +138,7 @@ exhale_m4b() {
      -c copy "${TAGS[@]}" -metadata "track=$3" "${BITEXACT[@]}" "$2"
 }
 
-# --- Tom Sawyer Required Formats (Library/Books/Mark Twain/) -----------------
+# --- Tom Sawyer Required Formats (Library/Audiobooks/Mark Twain/) -----------------
 
 twain_tags() { # $1 = Sample folder name, used as album/title
   TAGS=(-metadata "title=$1" -metadata "album=$1" -metadata "artist=Mark Twain"
@@ -251,7 +251,7 @@ make_twain() {
     "PDF-only book (no audio); scanned 1876 first edition with an OCR text layer, copied unmodified."
 }
 
-# --- A Study in Scarlet (Library/Books/Arthur Conan Doyle/) ------------------
+# --- A Study in Scarlet (Library/Audiobooks/Arthur Conan Doyle/) ------------------
 
 doyle_source_args() {
   DOYLE_ARGS=("Arthur Conan Doyle; read by Ashleighjane for LibriVox" "$PDM" "$PDM_URL"
@@ -295,7 +295,7 @@ make_doyle() {
     "Podcast folder name with a curly apostrophe (U+2019); 3 M4A episodes, AAC-LC 64 kbit/s mono; podcast-style MP4 tags: genre Podcast, stik 21 (podcast), show, track 1-3, episode_sort 1-3, episode_id S01E01-S01E03, season 1, release dates 2024-01-01 / 2024-01-08 / 2024-01-15; no chapters; no RSS feed. Three ${CLIP_LEN} s clips from ${CLIP_START} s into chapters 1-3."
 }
 
-# --- Pride and Prejudice (Library/Books/Jane Austen/) ------------------------
+# --- Pride and Prejudice (Library/Audiobooks/Jane Austen/) ------------------------
 
 make_austen() {
   local w="$WORK/austen" i d

@@ -16,14 +16,14 @@ Point audiobookshelf library folders at the two directories under `Library/`:
 
 | Folder | Library type |
 | --- | --- |
-| `Library/Books` | Books |
+| `Library/Audiobooks` | Books |
 | `Library/Podcasts` | Podcasts |
 
 With Docker, mount them read-only so test runs can't change the files:
 
 ```sh
 docker run -d -p 13378:80 \
-  -v "$(pwd)/Library/Books:/audiobooks:ro" \
+  -v "$(pwd)/Library/Audiobooks:/audiobooks:ro" \
   -v "$(pwd)/Library/Podcasts:/podcasts:ro" \
   -v abs-config:/config \
   -v abs-metadata:/metadata \
@@ -34,7 +34,7 @@ Then open http://localhost:13378, create the libraries, and run a scan. Don't po
 
 ## Required formats
 
-The library must always include at least one book in each of these formats. They are all in `Library/Books/Mark Twain/`, generated from the *Tom Sawyer* Source. Apart from the full-length book and the ebooks, each one is made of four 40-second clips.
+The library must always include at least one book in each of these formats. They are all in `Library/Audiobooks/Mark Twain/`, generated from the *Tom Sawyer* Source. Apart from the full-length book and the ebooks, each one is made of four 40-second clips.
 
 | Format | Path |
 | --- | --- |
@@ -54,8 +54,8 @@ The library must always include at least one book in each of these formats. They
 
 | Path | What it tests |
 | --- | --- |
-| `Books/Arthur Conan Doyle/Sherlock Holmes/Book 1 - A Study in Scarlet` | Series folder and `Book N -` token; 5 MP3 files; LAME VBR; ID3v2.4 |
-| `Books/Jane Austen/1813 - Pride and Prejudice {Karen Savage}` | Year and narrator tokens; single M4A (not M4B); embedded cover vs. a *different* `cover.jpg`; `desc.txt` and `reader.txt` that disagree with the embedded tags |
+| `Audiobooks/Arthur Conan Doyle/Sherlock Holmes/Book 1 - A Study in Scarlet` | Series folder and `Book N -` token; 5 MP3 files; LAME VBR; ID3v2.4 |
+| `Audiobooks/Jane Austen/1813 - Pride and Prejudice {Karen Savage}` | Year and narrator tokens; single M4A (not M4B); embedded cover vs. a *different* `cover.jpg`; `desc.txt` and `reader.txt` that disagree with the embedded tags |
 | `Podcasts/Watson’s Casebook` | Curly apostrophe (U+2019) in the folder name; M4A episodes with podcast MP4 tags (season, episode, release date) |
 | `Podcasts/Hacker Public Radio` | One show with mixed codecs (Opus, Ogg Vorbis, MP3); ID3v2.4 + ID3v1; a 192 kHz Vorbis file |
 | `Podcasts/Forschergeist` | Embedded chapters and cover in both MP3 (ID3 CHAP/CTOC, UTF-16 ID3v2.3) and Opus (CHAPTERxxx comments) |
