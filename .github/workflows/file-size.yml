@@ -1,0 +1,21 @@
+name: File size cap
+
+# ADR 0001: no file in the repo may exceed 40 MB.
+on:
+  push:
+  pull_request:
+
+jobs:
+  size:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fail on any file over 40 MB
+        run: |
+          big=$(find . -path ./.git -prune -o -type f -size +40M -print)
+          if [ -n "$big" ]; then
+            echo "::error::Files over the 40 MB cap (see docs/adr/0001):"
+            echo "$big"
+            exit 1
+          fi
+          echo "No file over 40 MB."
