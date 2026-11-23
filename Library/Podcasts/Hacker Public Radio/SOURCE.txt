@@ -1,0 +1,14 @@
+Title: Hacker Public Radio (3 episodes)
+Author/Creator: Hacker Public Radio community; episode hosts TheDUDE (hpr4776), candycanearter (hpr4767), Archer72 (hpr4772)
+Licence: CC BY-SA 4.0 (each episode page says "released under a CC-BY-SA license"; the site footer names CC BY-SA 4.0; embedded tags say "CC-BY-SA")
+Licence URL: https://creativecommons.org/licenses/by-sa/4.0/ (linked from each episode page footer, e.g. https://hackerpublicradio.org/eps/hpr4767/index.html)
+Source URL: https://hackerpublicradio.org/hpr_opus_rss.php (Opus), https://hackerpublicradio.org/hpr_ogg_rss.php (Ogg Vorbis), https://hackerpublicradio.org/hpr_mp3_rss.php (MP3). Each feed holds only the latest 10 shows.
+Episodes:
+  hpr4776.opus | https://hackerpublicradio.org/eps/hpr4776/index.html | 2026-11-23 | CC BY-SA ("Just filling in the schedule", flagged Explicit) | file: https://hub.hackerpublicradio.org/ccdn.php?filename=/eps/hpr4776/hpr4776.opus
+  hpr4767.ogg  | https://hackerpublicradio.org/eps/hpr4767/index.html | 2026-11-10 | CC BY-SA ("pseudoformats") | file: https://hub.hackerpublicradio.org/ccdn.php?filename=/eps/hpr4767/hpr4767.ogg
+  hpr4772.mp3  | https://hackerpublicradio.org/eps/hpr4772/index.html | 2026-11-17 | CC BY-SA ("Industrial power equipment and robotics?") | file: https://hub.hackerpublicradio.org/ccdn.php?filename=/eps/hpr4772/hpr4772.mp3
+Cases: Verbatim Sample, files byte-for-byte as published. One show with mixed codecs, a different episode per codec:
+  - hpr4776.opus: Ogg Opus, 48 kHz mono, about 70 kb/s, 6:10. Vorbis comments (title, artist, album, genre Podcast, track 4776, year). No chapters, no cover.
+  - hpr4767.ogg: Ogg Vorbis, mono, about 92 kb/s, 6:28. The header really does declare 192000 Hz: ffprobe reports sample_rate=192000, and the decoded stream is 192 kHz. Almost nothing sits above 22 kHz (mean -58.5 dB after a 22 kHz high-pass), so the source was probably upsampled. The nominal bitrate field is unset (ffprobe shows bit_rate=4294967295). Vorbis comments as above. No chapters, no cover.
+  - hpr4772.mp3: MP3 CBR 64 kb/s, 48 kHz mono, 9:33. ID3v2.4 (UTF-8 text frames, TRCK 4772, TDRC 2026) plus an ID3v1 trailer. No chapters, no cover.
+  Episode titles come from tags; the filenames are bare episode numbers.
