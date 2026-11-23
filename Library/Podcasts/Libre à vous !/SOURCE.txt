@@ -1,0 +1,16 @@
+Title: Libre à vous ! (3 "chronique" segments)
+Author/Creator: April, broadcast on radio Cause Commune; chroniques by Jean-Christophe Becquet, Vincent Calame and Anne L'Hôte
+Licence: At least one of: Licence Art Libre 1.3 or later, CC BY-SA 2.0 (FR) or later, GNU FDL 1.3 or later. This text is embedded in each file's TCOP/COMM tags and in the "Licence" section of each broadcast page. Music carries its own licences.
+Licence URL: https://artlibre.org/licence/lal/ , https://creativecommons.org/licenses/by-sa/2.0/fr/ , https://www.gnu.org/licenses/fdl-1.3.html (as embedded in the files' TCOP tag)
+Source URL: https://www.libreavous.org/rss
+Episodes:
+  libre-a-vous-20241001-chronique-jean-christophe-becquet.mp3 | https://www.libreavous.org/chronique-de-jean-christophe-becquet-sur-educajou-des-applications-libres-pour (broadcast: https://www.libreavous.org/220-enjeux-de-la-vie-privee-sur-internet-et-sur-les-appareils-connectes) | 2024-10-01 | Art Libre 1.3+ / CC BY-SA 2.0+ / GFDL 1.3+ (embedded)
+  libre-a-vous-20260317-chronique-vincent-calame-lectures-buissonieres.mp3 | https://www.libreavous.org/donc-on-peut-etre-informaticienne-et-ecolo (broadcast: https://www.libreavous.org/271-au-cafe-libre-l-alternative-informaticienne-et-ecolo) | 2026-03-17 | Art Libre 1.3+ / CC BY-SA 2.0+ / GFDL 1.3+ (embedded)
+  libre-a-vous-20260915-chronique-liberons-notre-quotidien-anne-lhote.mp3 | https://www.libreavous.org/chronique-d-anne-l-hote-sur-complete-ta-rue (broadcast: https://www.libreavous.org/284-gull-et-fete-des-possibles-corbeille-recuperation-de-fichiers-complete-ta) | 2026-09-15 | Art Libre 1.3+ / CC BY-SA 2.0+ / GFDL 1.3+ (embedded)
+  Music: these are spoken chronique segments, not full broadcasts, so the musical breaks are not in them. Each broadcast page lists every piece of music it uses, show jingles included. All of it is free-licensed (CC BY 3.0, CC BY-SA 3.0/4.0, Licence Art Libre 1.3), so any jingle in a segment can still be redistributed.
+Cases: Verbatim Sample, files byte-for-byte as published.
+  - Non-ASCII show folder: "Libre à vous !" (NFC U+00E0, with a space before "!").
+  - Non-ASCII episode titles in ID3 TIT2, e.g. "... Partie chronique de Jean-Christophe Becquet sur Éducajou : des applications libres pour l'école" and "... Partie Chronique d'Anne L'Hôte sur « Complète ta rue ! »" (guillemets, accents, a space before "!"). Filenames stay ASCII.
+  - ID3v2.4, UTF-8 text frames, TXXX and WOAF frames. Embedded APIC cover, PNG 1024x483 (not square, picture type "Other" rather than front cover).
+  - MP3 128 kb/s stereo. The 20241001 file is 44.1 kHz with an encoder-delay start (0.025 s). The 20260317 file is 44.1 kHz and the 20260915 file is 48 kHz; neither has a Xing/Info header, so ffprobe estimates their duration from the bitrate.
+  - No chapters.

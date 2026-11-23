@@ -1,0 +1,14 @@
+Title: Free as in Freedom, "FOSSY 2023" (MP3 and Ogg releases of the same episode)
+Author/Creator: Free as in Freedom (Karen Sandler and Bradley M. Kuhn), produced by Dan Lynch; theme music by Mike Tarantino with Charlie Paxson
+Licence: CC BY-SA 4.0. The feed item for this episode says: "The content of this audcast, and the accompanying show notes and music are licensed under the Creative Commons Attribution-Share-Alike 4.0 license (CC BY-SA 4.0)". The channel-level <copyright> in the feed still says CC BY-SA 3.0 US. The files carry no licence tag.
+Licence URL: https://creativecommons.org/licenses/by-sa/4.0/ (from the episode's feed item; channel: https://creativecommons.org/licenses/by-sa/3.0/us/)
+Source URL: https://faif.us/feeds/cast-mp3/ (as of 2023 this "MP3" feed lists the .ogg enclosure; the .mp3 is linked from the episode page). Ogg feed: https://faif.us/feeds/cast-ogg/
+Episodes:
+  FaiF_FOSSY-2023.mp3 | https://faif.us/cast/2023/jul/05/fossy-2023/ | 2023-07-05 | CC BY-SA 4.0 (feed item) | file: https://faif.us/cast-media/FaiF_FOSSY-2023.mp3
+  FaiF_FOSSY-2023.ogg | https://faif.us/cast/2023/jul/05/fossy-2023/ | 2023-07-05 | CC BY-SA 4.0 (feed item) | file: https://faif.us/cast-media/FaiF_FOSSY-2023.ogg
+Cases: Verbatim Sample, files byte-for-byte as published.
+  - Untagged files: metadata must come from the folder and filename.
+    - FaiF_FOSSY-2023.mp3: MP3 CBR 128 kb/s, 44.1 kHz stereo, 5:54. No ID3v2 header, no ID3v1 trailer, and no Xing/Info header, so ffprobe estimates the duration from the bitrate. No tags, chapters or cover at all.
+    - FaiF_FOSSY-2023.ogg: Ogg Vorbis 128 kb/s, 44.1 kHz stereo, 5:54. The only Vorbis comment is ENCODER=VLC media player: no title, artist, album or date. No chapters or cover.
+  - A show that has ended: this is the feed's newest item, and lastBuildDate is 2023-07-05.
+  - The same episode in two codecs in one show. Every other episode is at least 23 MB. The ones checked (0x59, 0x60, 0x62, 0x66, 0x69, 0x6B) carry ID3v2.3 tags or full Vorbis comments, so a second, distinct untagged episode was not available.
