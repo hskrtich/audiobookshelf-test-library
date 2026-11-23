@@ -54,3 +54,17 @@ ffprobe -hide_banner -show_format -show_streams -show_chapters "path/to/file.m4b
 ```
 
 ffmpeg is not installed on the current dev machine. Install it (e.g. `winget install Gyan.FFmpeg`) before generating or verifying encodings.
+
+## Agent skills
+
+### Issue tracker
+
+Issues are tracked in this repo's GitHub Issues (hskrtich/audiobookshelf-test-library) via the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Default five-role vocabulary: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: one `GLOSSARY.md` and `docs/adr/` at the repo root. See `docs/agents/domain.md`.
