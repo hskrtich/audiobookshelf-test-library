@@ -26,6 +26,7 @@ The folder structure *is* test data. audiobookshelf derives metadata from paths,
 
 ## Hard rules
 
+- **`main` is protected.** Never push to it directly, admins included: the push will be rejected. Work on a branch and open a PR against `main`. A PR can merge only when the `size` CI check passes and every review conversation is resolved. Don't merge PRs yourself unless asked.
 - **No file over 40 MB**, with no exceptions. CI enforces this. There is no Git LFS. See [ADR 0001](docs/adr/0001-trimmed-sources-committed-without-lfs.md). Git history is permanent, so every byte you commit is downloaded by every clone forever. Keep additions small.
 - **Licensing first.** Allowed: public domain, CC0, CC-BY, CC-BY-SA, and their NC variants. ND licences are allowed only for Verbatim Samples. Verify the licence against a primary source (the feed, the embedded tags, or the archive.org item), not from memory.
 - **Every Source and Sample has a `SOURCE.txt`** in this format:
