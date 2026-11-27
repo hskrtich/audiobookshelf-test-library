@@ -1,0 +1,7 @@
+Title: A Study in Scarlet
+Author/Creator: Arthur Conan Doyle; read by Ashleighjane for LibriVox
+Licence: Public Domain Mark 1.0
+Licence URL: https://creativecommons.org/publicdomain/mark/1.0/
+Source URL: https://archive.org/details/study_scarlet_1203_librivox
+Derived from: Sources/Arthur Conan Doyle - A Study in Scarlet
+Cases: 'Title - Subtitle' token in the folder name, no series folder. audiobookshelf splits it at the first ' - ' only when the server setting Settings > Scanner > 'Parse subtitles' (scannerParseSubtitle, off by default) is on. Expected with it off: title 'A Study in Scarlet - The Reminiscences of John H. Watson', no subtitle. Expected with it on: title 'A Study in Scarlet', subtitle 'The Reminiscences of John H. Watson'. The MP3 has no title, album or subtitle tag, because audio tags override the folder name; only artist and genre are tagged. Deliberate clash: with Parse subtitles on, this book has the same author and title as 'Sherlock Holmes/Book 1 - A Study in Scarlet', so the two must stay separate library items (one in a series, one not), not be merged or deduplicated. Single MP3, CBR 64 kbit/s, ID3v2.3; no chapters. Two 40 s clips from 20 s into chapters 1-2, mono 44100 Hz, concatenated.
