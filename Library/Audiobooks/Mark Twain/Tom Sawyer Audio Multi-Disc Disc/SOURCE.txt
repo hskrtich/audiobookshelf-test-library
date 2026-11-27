@@ -1,0 +1,7 @@
+Title: The Adventures of Tom Sawyer
+Author/Creator: Mark Twain; read by LibriVox volunteers
+Licence: Public Domain Mark 1.0
+Licence URL: https://creativecommons.org/publicdomain/mark/1.0/
+Source URL: https://archive.org/details/adventures_tom_sawyer_3_1903_librivox
+Derived from: Sources/Mark Twain - The Adventures of Tom Sawyer
+Cases: Multi-disc book in 'Disc 1/' and 'Disc 2/' subfolders (with a space) of the title folder, two MP3 files per disc; track numbers restart on each disc (ID3v2.3 TRCK 1/2-2/2 on both discs) and filename numbers restart too (01 - ..., 02 - ... in each disc folder); deliberately NO TPOS tag, so the disc number can only come from the folder name. Disc 1 holds chapters 1-2, Disc 2 chapters 3-4; CBR 64 kbit/s; no chapters. Four 40 s clips, from 20 s into chapters 1-4, mono 44100 Hz.

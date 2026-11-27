@@ -13,6 +13,7 @@
 #        scripts/make-samples.sh doyle      # A Study in Scarlet + Watson’s Casebook
 #        scripts/make-samples.sh austen     # Pride and Prejudice
 #        scripts/make-samples.sh id3        # ID3v1-only and ID3-chaptered MP3s
+#        scripts/make-samples.sh multidisc  # Multi-disc Tom Sawyer books
 #
 # Output is byte-for-byte reproducible on the same ffmpeg/exhale versions
 # (bitexact muxing), so re-running it on a clean checkout leaves git clean.
@@ -479,13 +480,48 @@ make_austen_codecs() {
   austen_codec_source "$d" "Single WMA file; Windows Media Audio 2 (wmav2, ffmpeg native encoder) 64 kbit/s mono in an ASF container; title and artist in the ASF Content Description object (Title, Author), plus Extended Content Description attributes WM/AlbumTitle, WM/AlbumArtist, WM/Composer, WM/Genre, WM/Year, WM/TrackNumber (ffmpeg also repeats title and artist there as literal "title" and "Author" attributes); ffprobe reports the year as WM/Year, not date; no chapters."
 }
 
+# --- Multi-disc books (Library/Audiobooks/Mark Twain/) ----------------------
+# Two discs of two MP3 clips each. Track numbers restart at 1 on each disc and
+# filename numbers restart in each disc folder, so only the disc folder (and, in the CD
+# spelling, the TPOS tag) puts the files in order.
+
+# multidisc_book NAME DISC_PREFIX TPOS(yes|no) CASES
+multidisc_book() {
+  local name="$1" prefix="$2" tpos="$3" w="$WORK/multidisc" d disc t i
+  d="$BOOKS/Mark Twain/$name"; fresh_dir "$d"
+  for disc in 1 2; do
+    mkdir -p "$d/$prefix$disc"
+    for t in 1 2; do
+      i=$(((disc - 1) * 2 + t))
+      local disctag=()
+      [ "$tpos" = yes ] && disctag=(-metadata "disc=$disc/2")
+      twain_tags "$name"
+      ff -i "$w/clip$i.wav" -c:a libmp3lame -b:a 64k -id3v2_version 3 \
+         "${TAGS[@]}" -metadata "title=Chapter $i" -metadata "track=$t/2" "${disctag[@]}" \
+         "${BITEXACT[@]}" "$d/$prefix$disc/0$t - Chapter $i.mp3"
+    done
+  done
+  twain_source "$d" "$4 Four ${CLIP_LEN} s clips, from ${CLIP_START} s into chapters 1-4, mono ${RATE} Hz."
+}
+
+make_multidisc() {
+  local w="$WORK/multidisc" i
+  mkdir -p "$w"
+  for i in 1 2 3 4; do clip_wav "$TWAIN_SRC" "$w/clip$i.wav" "$i"; done
+  multidisc_book "Tom Sawyer Audio Multi-Disc CD" "CD" yes \
+    "Multi-disc book in CD1/ and CD2/ subfolders of the title folder, two MP3 files per disc; track numbers restart on each disc (ID3v2.3 TRCK 1/2-2/2 on both discs) and filename numbers restart too (01 - ..., 02 - ... in each disc folder); disc numbers in TPOS (1/2, 2/2). Checks ordering by disc, then track. CD1 holds chapters 1-2, CD2 chapters 3-4; CBR 64 kbit/s; no chapters."
+  multidisc_book "Tom Sawyer Audio Multi-Disc Disc" "Disc " no \
+    "Multi-disc book in 'Disc 1/' and 'Disc 2/' subfolders (with a space) of the title folder, two MP3 files per disc; track numbers restart on each disc (ID3v2.3 TRCK 1/2-2/2 on both discs) and filename numbers restart too (01 - ..., 02 - ... in each disc folder); deliberately NO TPOS tag, so the disc number can only come from the folder name. Disc 1 holds chapters 1-2, Disc 2 chapters 3-4; CBR 64 kbit/s; no chapters."
+}
+
 what="${1:-all}"
 case "$what" in
-  all)    make_twain; make_doyle; make_austen; make_austen_codecs; make_id3 ;;
+  all)    make_twain; make_doyle; make_austen; make_austen_codecs; make_id3; make_multidisc ;;
   twain)  make_twain ;;
   doyle)  make_doyle ;;
   austen) make_austen; make_austen_codecs ;;
   id3)    make_id3 ;;
-  *) echo "usage: $0 [all|twain|doyle|austen|id3]" >&2; exit 2 ;;
+  multidisc) make_multidisc ;;
+  *) echo "usage: $0 [all|twain|doyle|austen|id3|multidisc]" >&2; exit 2 ;;
 esac
 echo "done"
