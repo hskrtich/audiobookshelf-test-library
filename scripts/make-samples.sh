@@ -411,7 +411,7 @@ make_id3() {
   for i in 1 2 3 4; do clip_wav "$TWAIN_SRC" "$w/twain$i.wav" "$i"; done
   TITLES=("Chapter 1" "Chapter 2" "Chapter 3" "Chapter 4")
   concat_wavs "$w/twain.wav" "$w"/twain{1,2,3,4}.wav
-  name="Tom Sawyer Single MP3 ID3v1"; d="$BOOKS/Mark Twain/$name"; fresh_dir "$d"
+  name="Tom Sawyer Audio ID3v1 Only"; d="$BOOKS/Mark Twain/$name"; fresh_dir "$d"
   ff -i "$w/twain.wav" -c:a libmp3lame -b:a 64k -id3v2_version 3 -write_id3v1 1 \
      -metadata "title=$name" -metadata "album=$name" -metadata "artist=Mark Twain" \
      -metadata "date=1876" -metadata "genre=Speech" -metadata "track=1" \
