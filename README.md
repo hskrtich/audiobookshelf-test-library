@@ -56,6 +56,8 @@ The library must always include at least one book in each of these formats. They
 | --- | --- |
 | `Audiobooks/Arthur Conan Doyle/Sherlock Holmes/Book 1 - A Study in Scarlet` | Series folder and `Book N -` token; 5 MP3 files; LAME VBR; ID3v2.4 |
 | `Audiobooks/Arthur Conan Doyle/A Study in Scarlet - The Reminiscences of John H. Watson` | `Title - Subtitle` token, split only when the "Parse subtitles" scanner setting is on; untagged title so the folder name wins; same author and title as `Book 1 - A Study in Scarlet` on purpose |
+| `Audiobooks/Mark Twain/Tom Sawyer Audio ID3v1 Only` | ID3v1.1 tags only: a 128-byte `TAG` trailer and no ID3v2 header |
+| `Audiobooks/Arthur Conan Doyle/A Study in Scarlet Single MP3 ID3 Chapters` | A book (not a podcast) as a single MP3 with 4 named ID3v2.3 chapters (CTOC/CHAP) |
 | `Audiobooks/Jane Austen/1813 - Pride and Prejudice {Karen Savage}` | Year and narrator tokens; single M4A (not M4B); embedded cover vs. a *different* `cover.jpg`; `desc.txt` and `reader.txt` that disagree with the embedded tags |
 | `Audiobooks/Mark Twain/Tom Sawyer Audio With EPUB` | EPUB in the same folder as audio: 4 MP3 files plus an attached EPUB in one book item |
 | `Audiobooks/Mark Twain/Tom Sawyer Audio With PDF` | PDF in the same folder as audio: 4 MP3 files plus an attached PDF in one book item |
@@ -73,7 +75,7 @@ These cases aren't covered yet. Contributions are welcome:
 
 - **Codecs and containers:** FLAC, WAV, WMA
 - **Layouts:** multi-disc (`CD1/`, `Disc 1/`)
-- **Metadata:** `metadata.opf`, `metadata.json`, ID3v1-only files, a book (not a podcast) with ID3 chapters
+- **Metadata:** `metadata.opf`, `metadata.json`
 
 ## Regenerating the samples
 
@@ -87,7 +89,7 @@ sudo apt install ffmpeg git make g++        # Debian/Ubuntu
 brew install ffmpeg                         # macOS (plus Xcode command-line tools)
 
 scripts/make-samples.sh                     # everything
-scripts/make-samples.sh twain               # or: doyle, austen
+scripts/make-samples.sh twain               # or: doyle, austen, id3
 ```
 
 The output is byte-for-byte reproducible on the same ffmpeg and exhale versions. The other podcasts are *verbatim*: the episodes are exactly as their shows published them.

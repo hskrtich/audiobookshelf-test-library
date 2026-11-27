@@ -12,6 +12,7 @@
 #        scripts/make-samples.sh twain      # Tom Sawyer Required Formats only
 #        scripts/make-samples.sh doyle      # A Study in Scarlet + Watson’s Casebook
 #        scripts/make-samples.sh austen     # Pride and Prejudice
+#        scripts/make-samples.sh id3        # ID3v1-only and ID3-chaptered MP3s
 #
 # Output is byte-for-byte reproducible on the same ffmpeg/exhale versions
 # (bitexact muxing), so re-running it on a clean checkout leaves git clean.
@@ -388,12 +389,63 @@ make_austen() {
     "Year token (1813 -) and narrator token ({Karen Savage}) in the folder name; single M4A (not M4B), AAC-LC 64 kbit/s mono, no chapters; embedded cover vs. cover.jpg (different images: embedded is 'Reading Jane's letters', cover.jpg is 'Such very superior dancing'); desc.txt vs. embedded description, and reader.txt (Karen Savage (reader.txt)) vs. embedded composer (Karen Savage (embedded tag)), deliberately different to test which source wins. Four ${CLIP_LEN} s clips from ${CLIP_START} s into chapters 1-4, mono ${RATE} Hz, concatenated."
 }
 
+# --- ID3 variants: ID3v1-only and ID3 CHAP/CTOC chapters (MP3) ---------------
+
+# strip_id3v2 IN.mp3 OUT.mp3 : copies IN without its leading ID3v2 tag, whose
+# length is the 10-byte header plus the syncsafe size in header bytes 6-9.
+strip_id3v2() {
+  local b
+  [ "$(head -c 3 "$1")" = ID3 ] || { echo "strip_id3v2: no ID3v2 tag in $1" >&2; exit 1; }
+  read -r -a b <<< "$(od -An -tu1 -j6 -N4 "$1")"
+  tail -c +$(( 11 + (b[0] << 21 | b[1] << 14 | b[2] << 7 | b[3]) )) "$1" > "$2"
+}
+
+make_id3() {
+  local w="$WORK/id3" i d name t
+  mkdir -p "$w"
+
+  # ID3v1 only: no ID3v2 header at all, just the 128-byte TAG trailer. ID3v1
+  # fields are 30 bytes, so the title fits; "Speech" is ID3v1 genre 101
+  # ("Audiobook" is not in the ID3v1 genre list). ffmpeg skips the ID3v1
+  # trailer when -id3v2_version is 0, so write both and cut off the ID3v2 tag.
+  for i in 1 2 3 4; do clip_wav "$TWAIN_SRC" "$w/twain$i.wav" "$i"; done
+  TITLES=("Chapter 1" "Chapter 2" "Chapter 3" "Chapter 4")
+  concat_wavs "$w/twain.wav" "$w"/twain{1,2,3,4}.wav
+  name="Tom Sawyer Audio ID3v1 Only"; d="$BOOKS/Mark Twain/$name"; fresh_dir "$d"
+  ff -i "$w/twain.wav" -c:a libmp3lame -b:a 64k -id3v2_version 3 -write_id3v1 1 \
+     -metadata "title=$name" -metadata "album=$name" -metadata "artist=Mark Twain" \
+     -metadata "date=1876" -metadata "genre=Speech" -metadata "track=1" \
+     "${BITEXACT[@]}" "$w/v1v2.mp3"
+  strip_id3v2 "$w/v1v2.mp3" "$d/$name.mp3"
+  twain_source "$d" "Single MP3 file with ID3v1.1 tags only: no ID3v2 header, just the 128-byte TAG trailer (title, artist, album, year 1876, track 1, genre 101 Speech); CBR 64 kbit/s; no chapters. Four ${CLIP_LEN} s clips, from ${CLIP_START} s into chapters 1-4, mono ${RATE} Hz."
+
+  # Single MP3 with 4 named ID3v2 chapters (CTOC + CHAP frames), titled from the
+  # Source's chapter tags.
+  doyle_source_args
+  TITLES=()
+  for i in 1 2 3 4; do
+    clip_wav "$DOYLE_SRC" "$w/doyle$i.wav" "$i"
+    TITLES+=("$(chapter_title "$(chapter_file "$DOYLE_SRC" "$i")")")
+  done
+  concat_wavs "$w/doyle.wav" "$w"/doyle{1,2,3,4}.wav
+  name="A Study in Scarlet Single MP3 ID3 Chapters"; d="$BOOKS/Arthur Conan Doyle/$name"; fresh_dir "$d"
+  ff -i "$w/doyle.wav" -i "$w/doyle.wav.ffmeta" -map 0:a -map_metadata 1 -map_chapters 1 \
+     -c:a libmp3lame -b:a 64k -id3v2_version 3 \
+     -metadata "title=A Study in Scarlet" -metadata "album=A Study in Scarlet" \
+     -metadata "artist=Arthur Conan Doyle" -metadata "album_artist=Arthur Conan Doyle" \
+     -metadata "composer=Ashleighjane" -metadata "genre=Audiobook" -metadata "date=1887" \
+     -metadata "track=1/1" "${BITEXACT[@]}" "$d/$name.mp3"
+  write_source "$d" "A Study in Scarlet" "${DOYLE_ARGS[@]}" \
+    "Single MP3 book (not a podcast) with embedded ID3 chapters: ID3v2.3 CTOC + 4 CHAP frames with TIT2 titles from the Source (${TITLES[0]}; ${TITLES[1]}; ${TITLES[2]}; ${TITLES[3]}); CBR 64 kbit/s. Four ${CLIP_LEN} s clips, from ${CLIP_START} s into chapters 1-4, mono ${RATE} Hz."
+}
+
 what="${1:-all}"
 case "$what" in
-  all)    make_twain; make_doyle; make_austen ;;
+  all)    make_twain; make_doyle; make_austen; make_id3 ;;
   twain)  make_twain ;;
   doyle)  make_doyle ;;
   austen) make_austen ;;
-  *) echo "usage: $0 [all|twain|doyle|austen]" >&2; exit 2 ;;
+  id3)    make_id3 ;;
+  *) echo "usage: $0 [all|twain|doyle|austen|id3]" >&2; exit 2 ;;
 esac
 echo "done"
