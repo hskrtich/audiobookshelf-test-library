@@ -61,6 +61,9 @@ The library must always include at least one book in each of these formats. They
 | `Audiobooks/Jane Austen/1813 - Pride and Prejudice {Karen Savage}` | Year and narrator tokens; single M4A (not M4B); embedded cover vs. a *different* `cover.jpg`; `desc.txt` and `reader.txt` that disagree with the embedded tags |
 | `Audiobooks/Mark Twain/Tom Sawyer Audio With EPUB` | EPUB in the same folder as audio: 4 MP3 files plus an attached EPUB in one book item |
 | `Audiobooks/Mark Twain/Tom Sawyer Audio With PDF` | PDF in the same folder as audio: 4 MP3 files plus an attached PDF in one book item |
+| `Audiobooks/Jane Austen/Pride and Prejudice Single FLAC` | Single FLAC file; Vorbis comment tags |
+| `Audiobooks/Jane Austen/Pride and Prejudice Single WAV` | Single WAV file, PCM 16-bit; tags only in a RIFF LIST/INFO chunk |
+| `Audiobooks/Jane Austen/Pride and Prejudice Single WMA` | Single WMA (wmav2) file in ASF; ASF tags |
 | `Podcasts/Watson’s Casebook` | Curly apostrophe (U+2019) in the folder name; M4A episodes with podcast MP4 tags (season, episode, release date) |
 | `Podcasts/Hacker Public Radio` | One show with mixed codecs (Opus, Ogg Vorbis, MP3); ID3v2.4 + ID3v1; a 192 kHz Vorbis file |
 | `Podcasts/Forschergeist` | Embedded chapters and cover in both MP3 (ID3 CHAP/CTOC, UTF-16 ID3v2.3) and Opus (CHAPTERxxx comments) |
@@ -73,7 +76,6 @@ Every folder's `SOURCE.txt` lists exactly which cases it covers, along with its 
 
 These cases aren't covered yet. Contributions are welcome:
 
-- **Codecs and containers:** FLAC, WAV, WMA
 - **Layouts:** multi-disc (`CD1/`, `Disc 1/`)
 - **Metadata:** `metadata.opf`, `metadata.json`
 

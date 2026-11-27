@@ -1,0 +1,7 @@
+Title: Pride and Prejudice
+Author/Creator: Jane Austen; read by Karen Savage for LibriVox
+Licence: Public Domain
+Licence URL: http://creativecommons.org/licenses/publicdomain/
+Source URL: https://archive.org/details/pride_prejudice_krs_librivox
+Derived from: Sources/Jane Austen - Pride and Prejudice
+Cases: Single WAV file; uncompressed PCM signed 16-bit little-endian (RIFF/WAVE); tags only as a RIFF LIST/INFO chunk, which keeps IART (artist), ICRD (date), IGNR (genre), INAM (title), IPRD (album) and IPRT (track); album artist and composer have no INFO field and are dropped; no ID3 chunk; no chapters. Two 40 s clips from 20 s into chapters 1-2, mono 44100 Hz, concatenated.

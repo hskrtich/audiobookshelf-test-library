@@ -1,0 +1,7 @@
+Title: Pride and Prejudice
+Author/Creator: Jane Austen; read by Karen Savage for LibriVox
+Licence: Public Domain
+Licence URL: http://creativecommons.org/licenses/publicdomain/
+Source URL: https://archive.org/details/pride_prejudice_krs_librivox
+Derived from: Sources/Jane Austen - Pride and Prejudice
+Cases: Single FLAC file; lossless FLAC (ffmpeg native encoder, compression level 8), 16-bit; Vorbis comment tags as written by ffmpeg, mixed-case field names (title, album, artist, composer, genre, date lowercase; ALBUMARTIST, TRACKNUMBER uppercase); vendor string ffmpeg; no chapters; no embedded cover. Two 40 s clips from 20 s into chapters 1-2, mono 44100 Hz, concatenated.

@@ -439,12 +439,52 @@ make_id3() {
     "Single MP3 book (not a podcast) with embedded ID3 chapters: ID3v2.3 CTOC + 4 CHAP frames with TIT2 titles from the Source (${TITLES[0]}; ${TITLES[1]}; ${TITLES[2]}; ${TITLES[3]}); CBR 64 kbit/s. Four ${CLIP_LEN} s clips, from ${CLIP_START} s into chapters 1-4, mono ${RATE} Hz."
 }
 
+# --- Pride and Prejudice in other codecs (Library/Audiobooks/Jane Austen/) -------
+# Single-file FLAC, WAV and WMA books, each from 2 clips (WAV is uncompressed,
+# so 2 clips keep it to about 7 MB). Folder names carry only a codec suffix,
+# with no year or {narrator} token, so they don't clash with the token Sample.
+
+austen_codec_tags() { # $1 = Sample folder name, used as title/album; $2 = year key
+  TAGS=(-metadata "title=$1" -metadata "album=$1" -metadata "artist=Jane Austen"
+        -metadata "album_artist=Jane Austen" -metadata "composer=Karen Savage"
+        -metadata "genre=Audiobook" -metadata "${2:-date}=1813" -metadata "track=1/1")
+}
+
+austen_codec_source() { # $1 = dir, $2 = cases
+  write_source "$1" "Pride and Prejudice" "Jane Austen; read by Karen Savage for LibriVox" \
+    "Public Domain" "http://creativecommons.org/licenses/publicdomain/" \
+    "https://archive.org/details/pride_prejudice_krs_librivox" "$(rel "$AUSTEN_SRC")" \
+    "$2 Two ${CLIP_LEN} s clips from ${CLIP_START} s into chapters 1-2, mono ${RATE} Hz, concatenated."
+}
+
+make_austen_codecs() {
+  local author="$BOOKS/Jane Austen" w="$WORK/austen-codecs" i d name
+  mkdir -p "$w"
+  for i in 1 2; do clip_wav "$AUSTEN_SRC" "$w/clip$i.wav" "$i"; done
+  TITLES=("Chapter 1" "Chapter 2")
+  concat_wavs "$w/all.wav" "$w"/clip{1,2}.wav
+
+  name="Pride and Prejudice Single FLAC"; d="$author/$name"; fresh_dir "$d"; austen_codec_tags "$name"
+  ff -i "$w/all.wav" -map 0:a -c:a flac -compression_level 8 "${TAGS[@]}" \
+     "${BITEXACT[@]}" "$d/$name.flac"
+  austen_codec_source "$d" "Single FLAC file; lossless FLAC (ffmpeg native encoder, compression level 8), 16-bit; Vorbis comment tags as written by ffmpeg, mixed-case field names (title, album, artist, composer, genre, date lowercase; ALBUMARTIST, TRACKNUMBER uppercase); vendor string "ffmpeg"; no chapters; no embedded cover."
+
+  name="Pride and Prejudice Single WAV"; d="$author/$name"; fresh_dir "$d"; austen_codec_tags "$name"
+  ff -i "$w/all.wav" -map 0:a -c:a pcm_s16le "${TAGS[@]}" "${BITEXACT[@]}" "$d/$name.wav"
+  austen_codec_source "$d" "Single WAV file; uncompressed PCM signed 16-bit little-endian (RIFF/WAVE); tags only as a RIFF LIST/INFO chunk, which keeps IART (artist), ICRD (date), IGNR (genre), INAM (title), IPRD (album) and IPRT (track); album artist and composer have no INFO field and are dropped; no ID3 chunk; no chapters."
+
+  # ffmpeg's ASF muxer writes "date" as a literal key, so name WM/Year directly.
+  name="Pride and Prejudice Single WMA"; d="$author/$name"; fresh_dir "$d"; austen_codec_tags "$name" WM/Year
+  ff -i "$w/all.wav" -map 0:a -c:a wmav2 -b:a 64k "${TAGS[@]}" "${BITEXACT[@]}" "$d/$name.wma"
+  austen_codec_source "$d" "Single WMA file; Windows Media Audio 2 (wmav2, ffmpeg native encoder) 64 kbit/s mono in an ASF container; title and artist in the ASF Content Description object (Title, Author), plus Extended Content Description attributes WM/AlbumTitle, WM/AlbumArtist, WM/Composer, WM/Genre, WM/Year, WM/TrackNumber (ffmpeg also repeats title and artist there as literal "title" and "Author" attributes); ffprobe reports the year as WM/Year, not date; no chapters."
+}
+
 what="${1:-all}"
 case "$what" in
-  all)    make_twain; make_doyle; make_austen; make_id3 ;;
+  all)    make_twain; make_doyle; make_austen; make_austen_codecs; make_id3 ;;
   twain)  make_twain ;;
   doyle)  make_doyle ;;
-  austen) make_austen ;;
+  austen) make_austen; make_austen_codecs ;;
   id3)    make_id3 ;;
   *) echo "usage: $0 [all|twain|doyle|austen|id3]" >&2; exit 2 ;;
 esac
