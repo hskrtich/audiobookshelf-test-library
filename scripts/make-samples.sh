@@ -249,6 +249,43 @@ make_twain() {
     "https://creativecommons.org/publicdomain/mark/1.0/" \
     "https://archive.org/details/adventuresoftoms00twaiiala" "$(rel "$TWAIN_EBOOKS")" \
     "PDF-only book (no audio); scanned 1876 first edition with an OCR text layer, copied unmodified."
+
+  make_twain_audio_with_ebook
+}
+
+# --- Tom Sawyer audio + ebook in one folder (Library/Audiobooks/Mark Twain/) --
+
+# Two book folders, each holding MP3 clips plus one ebook copied unmodified from
+# the ebooks Source, so audiobookshelf has to make one item with an attached
+# ebook. Git stores the copied ebooks once, so they add no size.
+make_twain_audio_with_ebook() {
+  local author="$BOOKS/Mark Twain" w="$WORK/twain-audio-ebook" i d name ext kind lic lic_url url
+  mkdir -p "$w"
+  for i in 1 2 3 4; do clip_wav "$TWAIN_SRC" "$w/clip$i.wav" "$i"; done
+  for ext in epub pdf; do
+    case "$ext" in
+      epub) kind="EPUB"; lic="public domain in the USA (Project Gutenberg EPUB)"
+            lic_url="https://www.gutenberg.org/policy/license.html"
+            url="https://www.gutenberg.org/ebooks/74" ;;
+      pdf)  kind="PDF"; lic="public domain (1876 scan, marked NOT_IN_COPYRIGHT by the Internet Archive)"
+            lic_url="$PDM_URL"
+            url="https://archive.org/details/adventuresoftoms00twaiiala" ;;
+    esac
+    name="Tom Sawyer Audio With $kind"; d="$author/$name"; fresh_dir "$d"
+    for i in 1 2 3 4; do
+      twain_tags "$name"
+      ff -i "$w/clip$i.wav" -c:a libmp3lame -b:a 64k -id3v2_version 3 \
+         "${TAGS[@]}" -metadata "title=Chapter $i" -metadata "track=$i/4" \
+         "${BITEXACT[@]}" "$d/0$i - Chapter $i.mp3"
+    done
+    cp "$TWAIN_EBOOKS/The Adventures of Tom Sawyer.$ext" "$d/"
+    write_source "$d" "The Adventures of Tom Sawyer" \
+      "Mark Twain; audio read by LibriVox volunteers" \
+      "$PDM (audio); $lic" "$PDM_URL (audio); $lic_url ($kind)" \
+      "https://archive.org/details/adventures_tom_sawyer_3_1903_librivox (audio); $url ($kind)" \
+      "$(rel "$TWAIN_SRC") and $(rel "$TWAIN_EBOOKS")" \
+      "Ebook in the same folder as audio: one book item with 4 MP3 files and an attached $kind (The Adventures of Tom Sawyer.$ext, copied unmodified). MP3s are CBR 64 kbit/s with ID3v2.3 tags, track numbers 1/4-4/4, no chapters. Four ${CLIP_LEN} s clips, from ${CLIP_START} s into chapters 1-4, mono ${RATE} Hz."
+  done
 }
 
 # --- A Study in Scarlet (Library/Audiobooks/Arthur Conan Doyle/) ------------------
