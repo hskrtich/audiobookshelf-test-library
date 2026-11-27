@@ -1,0 +1,7 @@
+Title: Pride and Prejudice
+Author/Creator: Jane Austen; read by Karen Savage for LibriVox
+Licence: Public Domain
+Licence URL: http://creativecommons.org/licenses/publicdomain/
+Source URL: https://archive.org/details/pride_prejudice_krs_librivox
+Derived from: Sources/Jane Austen - Pride and Prejudice
+Cases: Single WMA file; Windows Media Audio 2 (wmav2, ffmpeg native encoder) 64 kbit/s mono in an ASF container; title and artist in the ASF Content Description object (Title, Author), plus Extended Content Description attributes WM/AlbumTitle, WM/AlbumArtist, WM/Composer, WM/Genre, WM/Year, WM/TrackNumber (ffmpeg also repeats title and artist there as literal title and Author attributes); ffprobe reports the year as WM/Year, not date; no chapters. Two 40 s clips from 20 s into chapters 1-2, mono 44100 Hz, concatenated.
