@@ -66,6 +66,8 @@ The library must always include at least one book in each of these formats. They
 | `Audiobooks/Jane Austen/Pride and Prejudice Single WMA` | Single WMA (wmav2) file in ASF; ASF tags |
 | `Audiobooks/Mark Twain/Tom Sawyer Audio Multi-Disc CD` | Multi-disc layout: `CD1/` and `CD2/` subfolders, MP3 track numbers restart on each disc, disc number in TPOS |
 | `Audiobooks/Mark Twain/Tom Sawyer Audio Multi-Disc Disc` | Multi-disc layout: `Disc 1/` and `Disc 2/` subfolders, track numbers restart on each disc, no TPOS (disc number from the folder name only) |
+| `Audiobooks/Arthur Conan Doyle/A Study in Scarlet OPF Sidecar` | `metadata.opf` (OPF 2.0, Dublin Core, `calibre:series`) whose title, author, narrator, year, description, genre and series all differ from the folder name and ID3 tags; the OPF should win |
+| `Audiobooks/Jane Austen/Pride and Prejudice JSON Sidecar` | audiobookshelf's own `metadata.json` whose metadata and chapter titles all differ from the folder name, MP4 tags and embedded chapters; the JSON should win |
 | `Podcasts/Watson’s Casebook` | Curly apostrophe (U+2019) in the folder name; M4A episodes with podcast MP4 tags (season, episode, release date) |
 | `Podcasts/Hacker Public Radio` | One show with mixed codecs (Opus, Ogg Vorbis, MP3); ID3v2.4 + ID3v1; a 192 kHz Vorbis file |
 | `Podcasts/Forschergeist` | Embedded chapters and cover in both MP3 (ID3 CHAP/CTOC, UTF-16 ID3v2.3) and Opus (CHAPTERxxx comments) |
@@ -76,9 +78,7 @@ Every folder's `SOURCE.txt` lists exactly which cases it covers, along with its 
 
 ### Wanted
 
-These cases aren't covered yet. Contributions are welcome:
-
-- **Metadata:** `metadata.opf`, `metadata.json`
+Nothing at the moment: every case on the list so far has a Sample. If you think of a case that isn't covered, open an issue.
 
 ## Regenerating the samples
 
@@ -92,7 +92,7 @@ sudo apt install ffmpeg git make g++        # Debian/Ubuntu
 brew install ffmpeg                         # macOS (plus Xcode command-line tools)
 
 scripts/make-samples.sh                     # everything
-scripts/make-samples.sh twain               # or: doyle, austen, id3, multidisc
+scripts/make-samples.sh twain               # or: doyle, austen, id3, multidisc, sidecars
 ```
 
 The output is byte-for-byte reproducible on the same ffmpeg and exhale versions. The other podcasts are *verbatim*: the episodes are exactly as their shows published them.

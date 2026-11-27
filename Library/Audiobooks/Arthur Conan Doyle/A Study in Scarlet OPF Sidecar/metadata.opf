@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://www.idpf.org/2007/opf" version="2.0" unique-identifier="BookId">
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
+    <dc:identifier id="BookId" opf:scheme="URI">https://archive.org/details/study_scarlet_1203_librivox</dc:identifier>
+    <dc:title>A Study in Scarlet (metadata.opf)</dc:title>
+    <dc:creator opf:role="aut" opf:file-as="Doyle, Arthur Conan">Arthur Conan Doyle (metadata.opf)</dc:creator>
+    <dc:creator opf:role="nrt">Ashleighjane (metadata.opf)</dc:creator>
+    <dc:date>1888</dc:date>
+    <dc:description>METADATA.OPF description: this text comes from the metadata.opf sidecar, not the embedded tags.</dc:description>
+    <dc:subject>Detective fiction (metadata.opf)</dc:subject>
+    <dc:language>en</dc:language>
+    <meta name="calibre:series" content="Sherlock Holmes (metadata.opf)"/>
+    <meta name="calibre:series_index" content="2"/>
+  </metadata>
+</package>
