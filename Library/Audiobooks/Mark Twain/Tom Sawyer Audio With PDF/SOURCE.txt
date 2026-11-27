@@ -1,0 +1,7 @@
+Title: The Adventures of Tom Sawyer
+Author/Creator: Mark Twain; audio read by LibriVox volunteers
+Licence: Public Domain Mark 1.0 (audio); public domain (1876 scan, marked NOT_IN_COPYRIGHT by the Internet Archive)
+Licence URL: https://creativecommons.org/publicdomain/mark/1.0/ (audio); https://creativecommons.org/publicdomain/mark/1.0/ (PDF)
+Source URL: https://archive.org/details/adventures_tom_sawyer_3_1903_librivox (audio); https://archive.org/details/adventuresoftoms00twaiiala (PDF)
+Derived from: Sources/Mark Twain - The Adventures of Tom Sawyer and Sources/Mark Twain - The Adventures of Tom Sawyer (ebooks)
+Cases: Ebook in the same folder as audio: one book item with 4 MP3 files and an attached PDF (The Adventures of Tom Sawyer.pdf, copied unmodified). MP3s are CBR 64 kbit/s with ID3v2.3 tags, track numbers 1/4-4/4, no chapters. Four 40 s clips, from 20 s into chapters 1-4, mono 44100 Hz.
