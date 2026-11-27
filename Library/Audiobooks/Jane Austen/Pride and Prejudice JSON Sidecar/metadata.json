@@ -1,0 +1,42 @@
+{
+  "tags": [
+    "Tag from metadata.json"
+  ],
+  "chapters": [
+    {
+      "id": 0,
+      "start": 0,
+      "end": 40,
+      "title": "Chapter One (metadata.json)"
+    },
+    {
+      "id": 1,
+      "start": 40,
+      "end": 80,
+      "title": "Chapter Two (metadata.json)"
+    }
+  ],
+  "title": "Pride and Prejudice (metadata.json)",
+  "subtitle": "A Novel (metadata.json)",
+  "authors": [
+    "Jane Austen (metadata.json)"
+  ],
+  "narrators": [
+    "Karen Savage (metadata.json)"
+  ],
+  "series": [
+    "Austen Novels (metadata.json) #2"
+  ],
+  "genres": [
+    "Classics (metadata.json)"
+  ],
+  "publishedYear": "1894",
+  "publishedDate": null,
+  "publisher": "LibriVox (metadata.json)",
+  "description": "METADATA.JSON description: this text comes from the metadata.json sidecar, not the embedded tags.",
+  "isbn": null,
+  "asin": null,
+  "language": "en",
+  "explicit": false,
+  "abridged": true
+}

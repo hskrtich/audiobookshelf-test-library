@@ -14,6 +14,7 @@
 #        scripts/make-samples.sh austen     # Pride and Prejudice
 #        scripts/make-samples.sh id3        # ID3v1-only and ID3-chaptered MP3s
 #        scripts/make-samples.sh multidisc  # Multi-disc Tom Sawyer books
+#        scripts/make-samples.sh sidecars   # metadata.opf / metadata.json books
 #
 # Output is byte-for-byte reproducible on the same ffmpeg/exhale versions
 # (bitexact muxing), so re-running it on a clean checkout leaves git clean.
@@ -514,14 +515,135 @@ make_multidisc() {
     "Multi-disc book in 'Disc 1/' and 'Disc 2/' subfolders (with a space) of the title folder, two MP3 files per disc; track numbers restart on each disc (ID3v2.3 TRCK 1/2-2/2 on both discs) and filename numbers restart too (01 - ..., 02 - ... in each disc folder); deliberately NO TPOS tag, so the disc number can only come from the folder name. Disc 1 holds chapters 1-2, Disc 2 chapters 3-4; CBR 64 kbit/s; no chapters."
 }
 
+# --- Metadata sidecars: metadata.opf and metadata.json ----------------------
+# Every field differs between the folder name, the embedded tags and the
+# sidecar, and each value is labelled with where it came from, so it's obvious
+# which one audiobookshelf used. With its default metadata precedence (later
+# wins: folderStructure, audioMetatags, nfoFile, txtFiles, opfFile,
+# absMetadata) the sidecar should win every field it sets.
+
+make_sidecar_opf() {
+  local w="$WORK/sidecar-opf" i d t
+  mkdir -p "$w"; doyle_source_args
+  for i in 1 2; do clip_wav "$DOYLE_SRC" "$w/clip$i.wav" "$i"; done
+
+  d="$BOOKS/Arthur Conan Doyle/A Study in Scarlet OPF Sidecar"; fresh_dir "$d"
+  for i in 1 2; do
+    t="$(chapter_title "$(chapter_file "$DOYLE_SRC" "$i")")"
+    ff -i "$w/clip$i.wav" -c:a libmp3lame -q:a 6 -id3v2_version 4 \
+       -metadata "title=$t" -metadata "album=A Study in Scarlet (embedded tag)" \
+       -metadata "artist=Arthur Conan Doyle (embedded tag)" \
+       -metadata "album_artist=Arthur Conan Doyle (embedded tag)" \
+       -metadata "composer=Ashleighjane (embedded tag)" -metadata "genre=Audiobook (embedded tag)" \
+       -metadata "date=1887" -metadata "series=Sherlock Holmes (embedded tag)" \
+       -metadata "series-part=1" \
+       -metadata "comment=EMBEDDED TAG description: two clips from the LibriVox recording." \
+       -metadata "track=$i/2" "${BITEXACT[@]}" "$d/0$i - $t.mp3"
+  done
+  cat > "$d/metadata.opf" <<'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://www.idpf.org/2007/opf" version="2.0" unique-identifier="BookId">
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
+    <dc:identifier id="BookId" opf:scheme="URI">https://archive.org/details/study_scarlet_1203_librivox</dc:identifier>
+    <dc:title>A Study in Scarlet (metadata.opf)</dc:title>
+    <dc:creator opf:role="aut" opf:file-as="Doyle, Arthur Conan">Arthur Conan Doyle (metadata.opf)</dc:creator>
+    <dc:creator opf:role="nrt">Ashleighjane (metadata.opf)</dc:creator>
+    <dc:date>1888</dc:date>
+    <dc:description>METADATA.OPF description: this text comes from the metadata.opf sidecar, not the embedded tags.</dc:description>
+    <dc:subject>Detective fiction (metadata.opf)</dc:subject>
+    <dc:language>en</dc:language>
+    <meta name="calibre:series" content="Sherlock Holmes (metadata.opf)"/>
+    <meta name="calibre:series_index" content="2"/>
+  </metadata>
+</package>
+EOF
+  write_source "$d" "A Study in Scarlet" "${DOYLE_ARGS[@]}" \
+    "metadata.opf sidecar (OPF 2.0, Dublin Core) whose values deliberately differ from the folder name and the embedded tags: title is 'A Study in Scarlet OPF Sidecar' (folder) / 'A Study in Scarlet (embedded tag)' (ID3 album) / 'A Study in Scarlet (metadata.opf)' (dc:title); author 'Arthur Conan Doyle' (folder) / 'Arthur Conan Doyle (embedded tag)' (ID3 artist) / 'Arthur Conan Doyle (metadata.opf)' (dc:creator opf:role=aut); narrator 'Ashleighjane (embedded tag)' (ID3 composer) / 'Ashleighjane (metadata.opf)' (dc:creator opf:role=nrt); published year 1887 (ID3 date) / 1888 (dc:date); description 'EMBEDDED TAG ...' (ID3 comment) / 'METADATA.OPF ...' (dc:description); genre 'Audiobook (embedded tag)' / 'Detective fiction (metadata.opf)' (dc:subject); series 'Sherlock Holmes (embedded tag)' #1 (TXXX series / series-part) / 'Sherlock Holmes (metadata.opf)' #2 (calibre:series / calibre:series_index); language only in the OPF (en). Expected winner with audiobookshelf's default metadata precedence (opfFile is applied after folderStructure and audioMetatags): every '(metadata.opf)' value, year 1888, series #2. Multi-file MP3 book of 2 files; LAME VBR (-q:a 6); ID3v2.4 tags, track numbers 1/2-2/2; no chapters. Two ${CLIP_LEN} s clips from ${CLIP_START} s into chapters 1-2, mono ${RATE} Hz."
+}
+
+make_sidecar_json() {
+  local w="$WORK/sidecar-json" i d e1 e2
+  mkdir -p "$w"
+  for i in 1 2; do clip_wav "$AUSTEN_SRC" "$w/clip$i.wav" "$i"; done
+  TITLES=("Chapter 1 (embedded)" "Chapter 2 (embedded)")
+  concat_wavs "$w/all.wav" "$w/clip1.wav" "$w/clip2.wav"
+  # metadata.json chapter boundaries in seconds, from the same clip lengths.
+  e1="$(awk -v ms="$(wav_ms "$w/clip1.wav")" 'BEGIN { print ms / 1000 }')"
+  e2="$(awk -v a="$(wav_ms "$w/clip1.wav")" -v b="$(wav_ms "$w/clip2.wav")" 'BEGIN { print (a + b) / 1000 }')"
+
+  d="$BOOKS/Jane Austen/Pride and Prejudice JSON Sidecar"; fresh_dir "$d"
+  ff -i "$w/all.wav" -i "$w/all.wav.ffmeta" -map 0:a -map_metadata 1 -map_chapters 1 \
+     -c:a aac -b:a 64k \
+     -metadata "title=Pride and Prejudice (embedded tag)" \
+     -metadata "album=Pride and Prejudice (embedded tag)" \
+     -metadata "artist=Jane Austen (embedded tag)" -metadata "album_artist=Jane Austen (embedded tag)" \
+     -metadata "composer=Karen Savage (embedded tag)" -metadata "genre=Audiobook (embedded tag)" \
+     -metadata "date=1813" -metadata "grouping=Austen Novels (embedded tag) #1" \
+     -metadata "description=EMBEDDED TAG description: two clips from the LibriVox recording." \
+     -metadata track=1/1 "${BITEXACT[@]}" "$d/Pride and Prejudice JSON Sidecar.m4b"
+  # audiobookshelf's own metadata.json, in the layout its BookScanner.saveMetadataFile writes.
+  cat > "$d/metadata.json" <<EOF
+{
+  "tags": [
+    "Tag from metadata.json"
+  ],
+  "chapters": [
+    {
+      "id": 0,
+      "start": 0,
+      "end": $e1,
+      "title": "Chapter One (metadata.json)"
+    },
+    {
+      "id": 1,
+      "start": $e1,
+      "end": $e2,
+      "title": "Chapter Two (metadata.json)"
+    }
+  ],
+  "title": "Pride and Prejudice (metadata.json)",
+  "subtitle": "A Novel (metadata.json)",
+  "authors": [
+    "Jane Austen (metadata.json)"
+  ],
+  "narrators": [
+    "Karen Savage (metadata.json)"
+  ],
+  "series": [
+    "Austen Novels (metadata.json) #2"
+  ],
+  "genres": [
+    "Classics (metadata.json)"
+  ],
+  "publishedYear": "1894",
+  "publishedDate": null,
+  "publisher": "LibriVox (metadata.json)",
+  "description": "METADATA.JSON description: this text comes from the metadata.json sidecar, not the embedded tags.",
+  "isbn": null,
+  "asin": null,
+  "language": "en",
+  "explicit": false,
+  "abridged": true
+}
+EOF
+  write_source "$d" "Pride and Prejudice" \
+    "Jane Austen; read by Karen Savage for LibriVox" \
+    "Public Domain" "http://creativecommons.org/licenses/publicdomain/" \
+    "https://archive.org/details/pride_prejudice_krs_librivox" "$(rel "$AUSTEN_SRC")" \
+    "metadata.json sidecar in audiobookshelf's own format (flat keys, as written by its BookScanner.saveMetadataFile) whose values deliberately differ from the folder name and the embedded tags: title 'Pride and Prejudice JSON Sidecar' (folder) / 'Pride and Prejudice (embedded tag)' (MP4 album) / 'Pride and Prejudice (metadata.json)'; author 'Jane Austen' (folder) / 'Jane Austen (embedded tag)' (MP4 artist) / 'Jane Austen (metadata.json)'; narrator 'Karen Savage (embedded tag)' (MP4 composer) / 'Karen Savage (metadata.json)'; published year 1813 (MP4 date) / 1894; description 'EMBEDDED TAG ...' / 'METADATA.JSON ...'; genre 'Audiobook (embedded tag)' / 'Classics (metadata.json)'; series 'Austen Novels (embedded tag) #1' (MP4 grouping) / 'Austen Novels (metadata.json) #2'; chapters 'Chapter 1 (embedded)', 'Chapter 2 (embedded)' (embedded) / 'Chapter One (metadata.json)', 'Chapter Two (metadata.json)'; subtitle, publisher, tag, language (en) and abridged=true only in metadata.json. Expected winner with audiobookshelf's default metadata precedence (absMetadata is applied last): every '(metadata.json)' value, year 1894, series #2, the metadata.json chapter titles, abridged. Single M4B, AAC-LC 64 kbit/s mono, 2 embedded chapters. Two ${CLIP_LEN} s clips from ${CLIP_START} s into chapters 1-2, mono ${RATE} Hz, concatenated."
+}
+
+make_sidecars() { make_sidecar_opf; make_sidecar_json; }
+
 what="${1:-all}"
 case "$what" in
-  all)    make_twain; make_doyle; make_austen; make_austen_codecs; make_id3; make_multidisc ;;
+  all)    make_twain; make_doyle; make_austen; make_austen_codecs; make_id3; make_multidisc; make_sidecars ;;
   twain)  make_twain ;;
   doyle)  make_doyle ;;
   austen) make_austen; make_austen_codecs ;;
   id3)    make_id3 ;;
   multidisc) make_multidisc ;;
-  *) echo "usage: $0 [all|twain|doyle|austen|id3|multidisc]" >&2; exit 2 ;;
+  sidecars) make_sidecars ;;
+  *) echo "usage: $0 [all|twain|doyle|austen|id3|multidisc|sidecars]" >&2; exit 2 ;;
 esac
 echo "done"
