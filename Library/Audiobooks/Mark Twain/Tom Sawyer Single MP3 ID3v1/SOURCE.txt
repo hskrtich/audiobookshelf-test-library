@@ -1,0 +1,7 @@
+Title: The Adventures of Tom Sawyer
+Author/Creator: Mark Twain; read by LibriVox volunteers
+Licence: Public Domain Mark 1.0
+Licence URL: https://creativecommons.org/publicdomain/mark/1.0/
+Source URL: https://archive.org/details/adventures_tom_sawyer_3_1903_librivox
+Derived from: Sources/Mark Twain - The Adventures of Tom Sawyer
+Cases: Single MP3 file with ID3v1.1 tags only: no ID3v2 header, just the 128-byte TAG trailer (title, artist, album, year 1876, track 1, genre 101 Speech); CBR 64 kbit/s; no chapters. Four 40 s clips, from 20 s into chapters 1-4, mono 44100 Hz.
