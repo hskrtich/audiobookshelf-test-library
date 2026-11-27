@@ -55,6 +55,7 @@ The library must always include at least one book in each of these formats. They
 | Path | What it tests |
 | --- | --- |
 | `Audiobooks/Arthur Conan Doyle/Sherlock Holmes/Book 1 - A Study in Scarlet` | Series folder and `Book N -` token; 5 MP3 files; LAME VBR; ID3v2.4 |
+| `Audiobooks/Arthur Conan Doyle/A Study in Scarlet - The Reminiscences of John H. Watson` | `Title - Subtitle` token, split only when the "Parse subtitles" scanner setting is on; untagged title so the folder name wins; same author and title as `Book 1 - A Study in Scarlet` on purpose |
 | `Audiobooks/Jane Austen/1813 - Pride and Prejudice {Karen Savage}` | Year and narrator tokens; single M4A (not M4B); embedded cover vs. a *different* `cover.jpg`; `desc.txt` and `reader.txt` that disagree with the embedded tags |
 | `Podcasts/Watson’s Casebook` | Curly apostrophe (U+2019) in the folder name; M4A episodes with podcast MP4 tags (season, episode, release date) |
 | `Podcasts/Hacker Public Radio` | One show with mixed codecs (Opus, Ogg Vorbis, MP3); ID3v2.4 + ID3v1; a 192 kHz Vorbis file |
@@ -69,7 +70,7 @@ Every folder's `SOURCE.txt` lists exactly which cases it covers, along with its 
 These cases aren't covered yet. Contributions are welcome:
 
 - **Codecs and containers:** FLAC, WAV, WMA
-- **Layouts:** multi-disc (`CD1/`, `Disc 1/`), `Title - Subtitle`
+- **Layouts:** multi-disc (`CD1/`, `Disc 1/`)
 - **Metadata:** `metadata.opf`, `metadata.json`, ID3v1-only files, a book (not a podcast) with ID3 chapters
 - **Ebooks:** EPUB or PDF in the same folder as audio
 

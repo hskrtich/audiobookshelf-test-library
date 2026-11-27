@@ -293,6 +293,25 @@ make_doyle() {
   done
   write_source "$d" "Watson’s Casebook (podcast made from A Study in Scarlet)" "${DOYLE_ARGS[@]}" \
     "Podcast folder name with a curly apostrophe (U+2019); 3 M4A episodes, AAC-LC 64 kbit/s mono; podcast-style MP4 tags: genre Podcast, stik 21 (podcast), show, track 1-3, episode_sort 1-3, episode_id S01E01-S01E03, season 1, release dates 2024-01-01 / 2024-01-08 / 2024-01-15; no chapters; no RSS feed. Three ${CLIP_LEN} s clips from ${CLIP_START} s into chapters 1-3."
+
+  make_doyle_subtitle
+}
+
+# 'Title - Subtitle' folder token. The MP3 has no title or album tag: those
+# would override the folder name in audiobookshelf's audioMetatags step.
+make_doyle_subtitle() {
+  local w="$WORK/doyle-subtitle" i d
+  mkdir -p "$w"; doyle_source_args
+  for i in 1 2; do clip_wav "$DOYLE_SRC" "$w/clip$i.wav" "$i"; done
+  TITLES=("Chapter 1" "Chapter 2")
+  concat_wavs "$w/all.wav" "$w/clip1.wav" "$w/clip2.wav"
+
+  d="$BOOKS/Arthur Conan Doyle/A Study in Scarlet - The Reminiscences of John H. Watson"; fresh_dir "$d"
+  ff -i "$w/all.wav" -map_metadata -1 -c:a libmp3lame -b:a 64k -id3v2_version 3 \
+     -metadata "artist=Arthur Conan Doyle" -metadata "genre=Audiobook" \
+     "${BITEXACT[@]}" "$d/A Study in Scarlet.mp3"
+  write_source "$d" "A Study in Scarlet" "${DOYLE_ARGS[@]}" \
+    "'Title - Subtitle' token in the folder name, no series folder. audiobookshelf splits it at the first ' - ' only when the server setting Settings > Scanner > 'Parse subtitles' (scannerParseSubtitle, off by default) is on. Expected with it off: title 'A Study in Scarlet - The Reminiscences of John H. Watson', no subtitle. Expected with it on: title 'A Study in Scarlet', subtitle 'The Reminiscences of John H. Watson'. The MP3 has no title, album or subtitle tag, because audio tags override the folder name; only artist and genre are tagged. Deliberate clash: with Parse subtitles on, this book has the same author and title as 'Sherlock Holmes/Book 1 - A Study in Scarlet', so the two must stay separate library items (one in a series, one not), not be merged or deduplicated. Single MP3, CBR 64 kbit/s, ID3v2.3; no chapters. Two ${CLIP_LEN} s clips from ${CLIP_START} s into chapters 1-2, mono ${RATE} Hz, concatenated."
 }
 
 # --- Pride and Prejudice (Library/Audiobooks/Jane Austen/) ------------------------
